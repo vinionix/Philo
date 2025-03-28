@@ -6,7 +6,7 @@
 /*   By: vfidelis <vfidelis@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 18:43:22 by vfidelis          #+#    #+#             */
-/*   Updated: 2025/03/21 05:21:44 by vfidelis         ###   ########.fr       */
+/*   Updated: 2025/03/27 20:43:31 by vfidelis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_table	*new_node(t_node_type type, t_args *args, int i)
 {
 	t_table	*new_node;
 
-	new_node = malloc(sizeof(t_table));
+	new_node = (t_table *)malloc(sizeof(t_table));
 	new_node->args = args;
 	new_node->type = type;
 	if (type == FORK)
@@ -48,6 +48,8 @@ t_table	*new_node(t_node_type type, t_args *args, int i)
 		new_node->u_data.philo.id = i;
 		if (new_node->args->has_must_eat == 1)
 			new_node->u_data.philo.satisfied = new_node->args->must_eat;
+		else
+			new_node->u_data.philo.satisfied = 0;
 	}
 	new_node->prev = NULL;
 	new_node->next = NULL;
@@ -73,4 +75,44 @@ void	lst_add_back(t_table **table, t_table *new_node)
 	new_node->next = *table;
 	(*table)->prev = new_node;
 	return ;
+}
+
+static void	aux_ft_free(t_table **table)
+{
+	while (1)
+	{
+		if ((*table)->type == FORK)
+		{
+			if ((*table)->u_data.fork.id == 1)
+			{
+				(*table) = (*table)->prev;
+				(*table)->prev->next = NULL;
+				(*table)->prev = NULL;
+				break ;
+			}
+		}
+		(*table) = (*table)->next;
+	}
+}
+
+void	ft_free_all(t_table *table)
+{
+	t_table	*temp;
+	
+	temp = NULL;
+	aux_ft_free(&table);
+	pthread_mutex_destroy(&table->args->alive_mutex);
+	pthread_mutex_destroy(&table->args->print);
+	while (table->next)
+	{
+		if (table->next)
+			temp = table->next;
+		if (table->type == FORK)
+			pthread_mutex_destroy(&table->u_data.fork.lock);
+		free(table);
+		table = temp;
+	}
+	if (table->type == FORK)
+		pthread_mutex_destroy(&table->u_data.fork.lock);
+	free(table);
 }

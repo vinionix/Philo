@@ -6,7 +6,7 @@
 /*   By: vfidelis <vfidelis@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 20:08:26 by vfidelis          #+#    #+#             */
-/*   Updated: 2025/03/21 05:41:50 by vfidelis         ###   ########.fr       */
+/*   Updated: 2025/03/27 20:37:17 by vfidelis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 int	main(int argc, char **argv)
 {
-	t_args	args;
-	t_table	*table;
+	t_args		args;
+	t_table		*table;
+	t_table		*aux;
+	pthread_t	mot;
 
 	table = NULL;
 	if (argc < 5 || argc > 6)
@@ -24,17 +26,29 @@ int	main(int argc, char **argv)
 		return (0);
 	}
 	if (ft_initialize_args(&args, argc, argv) == 0)
+	{
+		write(1, "Error\n", 6);
 		return (0);
+	}
 	ft_initialize_table(&table, &args);
-	for(int i = 0; i < 25; i++)
+	aux = table->prev;
+	args.start_time = get_current_time();
+	while(table != aux)
 	{
 		if (table->type == PHILO)
 		{
-			printf("Philo id: %d\n", table->u_data.philo.id);
-			printf("Number_eat: %d\n\n", table->u_data.philo.satisfied);
+			table->u_data.philo.last_meal = args.start_time;
+			pthread_create(&table->u_data.philo.phl, NULL, routine, table);
 		}
-		else if (table->type == FORK)
-			printf("Fork_id: %d\n\n", table->u_data.fork.id);
 		table = table->next;
 	}
+	table = table->next;
+	pthread_create(&mot, NULL, ft_monitoring, table);
+	while (table != aux->next)
+	{
+		if (table->type == PHILO)
+			pthread_join(table->u_data.philo.phl, NULL);
+	}
+	pthread_join(mot, NULL);
+	ft_free_all(table);
 }
