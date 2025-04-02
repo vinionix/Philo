@@ -81,5 +81,6 @@ void		print_status(t_table *table, char *status);
 void		ft_sleep(long action, t_table *table);
 void		*routine(void *args);
 void		*ft_monitoring(void *args);
+void		*one_philo(void *args);
 
 #endif

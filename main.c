@@ -33,6 +33,13 @@ int	main(int argc, char **argv)
 	ft_initialize_table(&table, &args);
 	aux = table->prev;
 	args.start_time = get_current_time();
+	if (table->args->num_philos == 1)
+	{
+		pthread_create(&table->u_data.philo.phl, NULL, one_philo, table);
+		pthread_join(table->u_data.philo.phl, NULL);
+		ft_free_all(table);
+		return (0);
+	}
 	while (table != aux)
 	{
 		if (table->type == PHILO)

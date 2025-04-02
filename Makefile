@@ -17,7 +17,7 @@ REMOVE_FILES = rm -rf
 COMP = cc
 FLAGS = -Wall -Werror -Wextra
 
-FILE_C = ft_initialize.c useful.c useful2.c philo_cycle.c monitoring.c main.c
+FILE_C = ft_initialize.c useful.c useful2.c philo_cycle.c monitoring.c one_philo.c main.c
 FILE_O = $(FILE_C:.c=.o)
 
 all: $(NAME)
