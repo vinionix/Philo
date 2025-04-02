@@ -47,5 +47,6 @@ int	ft_initialize_args(t_args *args, int argc, char **argv)
 	args->alive = 1;
 	pthread_mutex_init(&args->alive_mutex, NULL);
 	pthread_mutex_init(&args->print, NULL);
+	pthread_mutex_init(&args->num_philos_mutex, NULL);
 	return (1);
 }

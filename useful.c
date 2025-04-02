@@ -49,7 +49,8 @@ t_table	*new_node(t_node_type type, t_args *args, int i)
 		if (new_node->args->has_must_eat == 1)
 			new_node->u_data.philo.satisfied = new_node->args->must_eat;
 		else
-			new_node->u_data.philo.satisfied = 0;
+			new_node->u_data.philo.satisfied = -1;
+		pthread_mutex_init(&new_node->u_data.philo.meal_mutex, NULL);
 	}
 	new_node->prev = NULL;
 	new_node->next = NULL;
@@ -103,6 +104,7 @@ void	ft_free_all(t_table *table)
 	aux_ft_free(&table);
 	pthread_mutex_destroy(&table->args->alive_mutex);
 	pthread_mutex_destroy(&table->args->print);
+	pthread_mutex_destroy(&table->args->num_philos_mutex);
 	while (table->next)
 	{
 		if (table->next)

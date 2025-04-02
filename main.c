@@ -42,12 +42,13 @@ int	main(int argc, char **argv)
 		}
 		table = table->next;
 	}
-	table = table->next;
 	pthread_create(&mot, NULL, ft_monitoring, table);
-	while (table != aux->next)
+	table = table->next;
+	while (table != aux)
 	{
 		if (table->type == PHILO)
 			pthread_join(table->u_data.philo.phl, NULL);
+		table = table->next;
 	}
 	pthread_join(mot, NULL);
 	ft_free_all(table);

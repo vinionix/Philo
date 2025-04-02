@@ -23,6 +23,7 @@ typedef struct s_philo_args
 {
 	pthread_mutex_t	print;
 	pthread_mutex_t	alive_mutex;
+	pthread_mutex_t num_philos_mutex;
 	long long		start_time;
 	long			num_philos;
 	long			time_to_die;
@@ -42,7 +43,6 @@ typedef enum s_node_type
 typedef struct s_fork
 {
 	int				id;
-	int				unlok;
 	pthread_mutex_t	lock;
 }					t_fork;
 
@@ -52,7 +52,7 @@ typedef struct s_philo
 	int				id;
 	long long		last_meal;
 	int				satisfied;
-
+	pthread_mutex_t meal_mutex;
 }					t_philo;
 
 typedef struct s_table
@@ -78,7 +78,7 @@ void		lst_add_back(t_table **table, t_table *new_node);
 void		ft_initialize_table(t_table **table, t_args *args);
 void		ft_free_all(t_table *table);
 void		print_status(t_table *table, char *status);
-void		ft_sleep(long action);
+void		ft_sleep(long action, t_table *table);
 void		*routine(void *args);
 void    	*ft_monitoring(void *args);
 
