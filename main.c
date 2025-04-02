@@ -33,7 +33,7 @@ int	main(int argc, char **argv)
 	ft_initialize_table(&table, &args);
 	aux = table->prev;
 	args.start_time = get_current_time();
-	while(table != aux)
+	while (table != aux)
 	{
 		if (table->type == PHILO)
 		{

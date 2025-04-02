@@ -23,7 +23,7 @@ typedef struct s_philo_args
 {
 	pthread_mutex_t	print;
 	pthread_mutex_t	alive_mutex;
-	pthread_mutex_t num_philos_mutex;
+	pthread_mutex_t	num_philos_mutex;
 	long long		start_time;
 	long			num_philos;
 	long			time_to_die;
@@ -52,7 +52,7 @@ typedef struct s_philo
 	int				id;
 	long long		last_meal;
 	int				satisfied;
-	pthread_mutex_t meal_mutex;
+	pthread_mutex_t	meal_mutex;
 }					t_philo;
 
 typedef struct s_table
@@ -68,7 +68,7 @@ typedef struct s_table
 	struct s_table	*next;
 }					t_table;
 
-long long   get_current_time(void);
+long long	get_current_time(void);
 long long	timey(t_table *table);
 long		ft_atoi(char *arg);
 int			ft_initialize_args(t_args *args, int argc, char **argv);
@@ -80,6 +80,6 @@ void		ft_free_all(t_table *table);
 void		print_status(t_table *table, char *status);
 void		ft_sleep(long action, t_table *table);
 void		*routine(void *args);
-void    	*ft_monitoring(void *args);
+void		*ft_monitoring(void *args);
 
 #endif

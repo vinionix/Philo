@@ -99,7 +99,7 @@ static void	aux_ft_free(t_table **table)
 void	ft_free_all(t_table *table)
 {
 	t_table	*temp;
-	
+
 	temp = NULL;
 	aux_ft_free(&table);
 	pthread_mutex_destroy(&table->args->alive_mutex);
