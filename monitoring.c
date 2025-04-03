@@ -48,11 +48,13 @@ int	ft_check_philosopher(t_table *table)
 
 	now = timey(table);
 	pthread_mutex_lock(&table->u_data.philo.meal_mutex);
+	if (table->args->num_philos % 2 == 1)
+		usleep(1000);
 	time_elapsed = now - table->u_data.philo.last_meal;
 	satisfied = table->u_data.philo.satisfied;
 	pthread_mutex_unlock(&table->u_data.philo.meal_mutex);
 	pthread_mutex_lock(&table->args->alive_mutex);
-	if (time_elapsed >= table->args->time_to_die)
+	if (time_elapsed > table->args->time_to_die)
 	{
 		table->args->alive = 0;
 		print_status(table, "died");
@@ -90,52 +92,3 @@ void	*ft_monitoring(void *args)
 	return (NULL);
 }
 
-// void    *ft_monitoring(void *args)
-// {
-// 	t_table		*table;
-// 	long long	time_elapsed;
-// 	long long	now;
-// 	t_table		*start;
-// 	int 		satisfied;
-
-// 	table = (t_table *)args;
-// 	start = table;
-// 	while(1)
-// 	{
-// 		if (table->type == PHILO)
-// 		{
-// 			now = timey(table);
-// 			pthread_mutex_lock(&table->u_data.philo.meal_mutex);
-// 			time_elapsed = now - table->u_data.philo.last_meal;
-// 			pthread_mutex_unlock(&table->u_data.philo.meal_mutex);
-// 			pthread_mutex_lock(&table->args->alive_mutex);
-//             pthread_mutex_lock(&table->u_data.philo.meal_mutex);
-//             satisfied = table->u_data.philo.satisfied;
-//             pthread_mutex_unlock(&table->u_data.philo.meal_mutex);
-// 			if (time_elapsed > table->args->time_to_die)
-// 			{
-// 				table->args->alive = 0;
-// 				print_status(table, "died");
-// 				pthread_mutex_unlock(&table->args->alive_mutex);
-// 				return (NULL);
-// 			}
-// 			if (table->args->has_must_eat == 1 && satisfied == 0)
-// 			{
-// 				pthread_mutex_lock(&table->args->num_philos_mutex);
-// 				if (table->args->num_philos == 0)
-// 				{
-// 					pthread_mutex_unlock(&table->args->alive_mutex);
-// 					pthread_mutex_unlock(&table->args->num_philos_mutex);
-// 					usleep(1000000);
-// 					return (NULL);
-// 				}
-// 				pthread_mutex_unlock(&table->args->num_philos_mutex);
-// 			}
-// 			pthread_mutex_unlock(&table->args->alive_mutex);
-// 		}
-// 		if (table == start)
-// 			usleep(1);
-// 		table = table->next;
-// 	}
-// 	return (NULL);
-// }
