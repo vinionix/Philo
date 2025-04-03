@@ -6,7 +6,7 @@
 /*   By: vfidelis <vfidelis@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 14:19:22 by vfidelis          #+#    #+#             */
-/*   Updated: 2025/04/02 14:22:48 by vfidelis         ###   ########.fr       */
+/*   Updated: 2025/04/03 17:43:14 by vfidelis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	*one_philo(void *args)
 {
-    t_table	*table;
+	t_table	*table;
 
 	table = (t_table *)args;
 	print_status(table, "taken a fork");

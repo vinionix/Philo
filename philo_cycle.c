@@ -12,7 +12,26 @@
 
 #include "philo.h"
 
-void	try_to_catch(t_table *table)
+static void	try_fork_minor(t_table *table)
+{
+	pthread_mutex_lock(&table->prev->u_data.fork.lock);
+	if (!is_alive(table))
+	{
+		pthread_mutex_unlock(&table->prev->u_data.fork.lock);
+		return ;
+	}
+	print_status(table, "has taken a fork");
+	pthread_mutex_lock(&table->next->u_data.fork.lock);
+	if (!is_alive(table))
+	{
+		pthread_mutex_unlock(&table->next->u_data.fork.lock);
+		pthread_mutex_unlock(&table->prev->u_data.fork.lock);
+		return ;
+	}
+	print_status(table, "has taken a fork");
+}
+
+static void	try_fork_bigger(t_table *table)
 {
 	if (table->prev->u_data.fork.id < table->next->u_data.fork.id)
 	{
@@ -33,34 +52,12 @@ void	try_to_catch(t_table *table)
 		print_status(table, "has taken a fork");
 	}
 	else
-	{
-		pthread_mutex_lock(&table->prev->u_data.fork.lock);
-		if (!is_alive(table))
-		{
-			pthread_mutex_unlock(&table->prev->u_data.fork.lock);
-			return ;
-		}
-		print_status(table, "has taken a fork");
-		pthread_mutex_lock(&table->next->u_data.fork.lock);
-		if (!is_alive(table))
-		{
-			pthread_mutex_unlock(&table->next->u_data.fork.lock);
-			pthread_mutex_unlock(&table->prev->u_data.fork.lock);
-			return ;
-		}
-		print_status(table, "has taken a fork");
-	}
-}
-
-void	drop_fork(t_table *table)
-{
-	pthread_mutex_unlock(&table->prev->u_data.fork.lock);
-	pthread_mutex_unlock(&table->next->u_data.fork.lock);
+		try_fork_minor(table);
 }
 
 static void	eat(t_table *table)
 {
-	try_to_catch(table);
+	try_fork_bigger(table);
 	if (!is_alive(table))
 	{
 		return ;
@@ -80,7 +77,8 @@ static void	eat(t_table *table)
 	pthread_mutex_unlock(&table->u_data.philo.meal_mutex);
 	print_status(table, "is eating");
 	ft_sleep(table->args->time_to_eat, table);
-	drop_fork(table);
+	pthread_mutex_unlock(&table->prev->u_data.fork.lock);
+	pthread_mutex_unlock(&table->next->u_data.fork.lock);
 }
 
 static void	spleep(t_table *table)
