@@ -6,7 +6,7 @@
 /*   By: vfidelis <vfidelis@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 13:41:18 by vfidelis          #+#    #+#             */
-/*   Updated: 2025/04/02 13:41:18 by vfidelis         ###   ########.fr       */
+/*   Updated: 2025/04/03 20:18:37 by vfidelis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,6 @@ int	ft_check_philosopher(t_table *table)
 
 	now = timey(table);
 	pthread_mutex_lock(&table->u_data.philo.meal_mutex);
-	if (table->args->num_philos % 2 == 1)
-		usleep(1000);
 	time_elapsed = now - table->u_data.philo.last_meal;
 	satisfied = table->u_data.philo.satisfied;
 	pthread_mutex_unlock(&table->u_data.philo.meal_mutex);
@@ -91,4 +89,3 @@ void	*ft_monitoring(void *args)
 	}
 	return (NULL);
 }
-
